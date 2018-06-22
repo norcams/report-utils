@@ -31,18 +31,10 @@ major_version=`echo $platform_version | cut -d. -f1`
 
 url="https://report.uh-iaas.no/downloads/${platform}/${major_version}/report"
 
-case $platform in
-  "el")
-    case $major_version in
-      "6")
-        break
-        ;;
-    esac
-    ;;
-  *)
-    echo -e "#\!/bin/bash\nset -e\n\ncurl -fsS ${url} -o /usr/local/sbin/report\nchmod +x /usr/local/sbin/report\n\n/usr/local/sbin/report\n\nexit 0" \
-      | sudo tee /usr/local/sbin/report_wrapper
-    sudo chmod +x /usr/local/sbin/report_wrapper
+install() {
+  echo -e "#\!/bin/bash\nset -e\n\ncurl -fsS ${url} -o /usr/local/sbin/report\nchmod +x /usr/local/sbin/report\n\n/usr/local/sbin/report\n\nexit 0" \
+    | sudo tee /usr/local/sbin/report_wrapper
+  sudo chmod +x /usr/local/sbin/report_wrapper
 cat <<-EOF | sudo tee /lib/systemd/system/report.timer
 [Unit]
 Description=Run report script every 6h and on boot
@@ -63,6 +55,21 @@ Description=Report to UH-IaaS report API
 Type=oneshot
 ExecStart=/usr/local/sbin/report_wrapper
 EOF
-    sudo systemctl enable report.timer
+  sudo systemctl enable report.timer
+}
+
+case $platform in
+  "el")
+    case $major_version in
+      "6")
+        break
+        ;;
+      "7")
+        install
+        ;;
+    esac
+    ;;
+  *)
+    install
     ;;
 esac
