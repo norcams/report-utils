@@ -1,0 +1,38 @@
+##########################################
+##
+## Report patching and security
+##
+## The UH-IaaS Team
+##
+##########################################
+
+function Get-Uptime {
+   $os = Get-WmiObject win32_operatingsystem
+   $uptime = (Get-Date) - ($os.ConvertToDateTime($os.lastbootuptime))
+   $Display = $Uptime.Days
+   Write-Output $Display
+}
+
+function Get-IpAddress {
+   $ip = Get-NetIPAddress -AddressState Preferred -AddressFamily IPv4 -InterfaceAlias Ethernet
+   Write-Output $ip.IPAddress
+}
+
+function Get-HostName {
+   $hostname = get-content env:computername
+   Write-Output $hostname.ToLower()
+}
+
+$uptime = Get-Uptime
+$ip = Get-IpAddress
+$hostname = Get-HostName
+
+$JSON = @{
+"ip" = "$ip"
+"name" = "$hostname"
+"uptime" = $uptime
+}|ConvertTo-Json
+
+$response = Invoke-WebRequest -Uri "https://report.uh-iaas.no/api/v1/instance" -ContentType "application/json" -Method POST -Body $JSON
+
+#Write-Output $response
