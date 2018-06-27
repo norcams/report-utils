@@ -1,4 +1,54 @@
 #!/bin/bash
+
+install_wrapper() {
+cat <<-EOF | sudo tee /usr/local/sbin/report_wrapper
+#!/bin/bash
+set -e
+
+curl -fsS $url -o /usr/local/sbin/report
+chmod +x /usr/local/sbin/report
+
+/usr/local/sbin/report
+
+exit 0
+EOF
+  sudo chmod +x /usr/local/sbin/report_wrapper
+}
+
+install_anacron() {
+cat <<-EOF | sudo tee /etc/cron.daily/report
+#!/bin/sh
+
+/usr/local/sbin/report_wrapper
+
+exit 0
+EOF
+}
+
+install_systemd() {
+cat <<-EOF | sudo tee /lib/systemd/system/report.timer
+[Unit]
+Description=Run report script every 6h and on boot
+
+[Timer]
+OnBootSec=15min
+OnUnitActiveSec=12h
+Persistent=true
+
+[Install]
+WantedBy=timers.target
+EOF
+cat <<-EOF | sudo tee /lib/systemd/system/report.service
+[Unit]
+Description=Report to UH-IaaS report API
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/report_wrapper
+EOF
+  sudo systemctl enable report.timer
+}
+
 # Platform detection (borrowed from Omnitruck install script)
 # Debian-family and RedHat-family are currently supported
 os=`uname -s | tr '[A-Z]' '[a-z]'`
@@ -31,54 +81,20 @@ major_version=`echo $platform_version | cut -d. -f1`
 
 url="https://report.uh-iaas.no/downloads/${platform}/${major_version}/v1/report"
 
-install() {
-cat <<-EOF | sudo tee /usr/local/sbin/report_wrapper
-#!/bin/bash
-set -e
-
-curl -fsS $url -o /usr/local/sbin/report
-chmod +x /usr/local/sbin/report
-
-/usr/local/sbin/report
-
-exit 0
-EOF
-  sudo chmod +x /usr/local/sbin/report_wrapper
-cat <<-EOF | sudo tee /lib/systemd/system/report.timer
-[Unit]
-Description=Run report script every 6h and on boot
-
-[Timer]
-OnBootSec=15min
-OnUnitActiveSec=12h
-Persistent=true
-
-[Install]
-WantedBy=timers.target
-EOF
-cat <<-EOF | sudo tee /lib/systemd/system/report.service
-[Unit]
-Description=Report to UH-IaaS report API
-
-[Service]
-Type=oneshot
-ExecStart=/usr/local/sbin/report_wrapper
-EOF
-  sudo systemctl enable report.timer
-}
+install_wrapper
 
 case $platform in
   "el")
     case $major_version in
       "6")
-        break
+        install_anacron
         ;;
       "7")
-        install
+        install_systemd
         ;;
     esac
     ;;
   *)
-    install
+    install_systemd
     ;;
 esac
