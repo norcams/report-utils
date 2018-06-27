@@ -2,7 +2,7 @@
 set -e
 
 ip=$(ip route get 8.8.8.8 | awk 'NR==1 {print $7}')
-hostname=$(hostname -f)
+hostname=$(hostname)
 uptime=$(awk '{printf("%d",($1/60/60/24))}' /proc/uptime)
 
 curl -k -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d "{ \
