@@ -19,7 +19,7 @@ install_anacron() {
 cat <<-EOF | sudo tee /etc/cron.daily/report
 #!/bin/sh
 
-/usr/local/sbin/report_wrapper
+/usr/local/sbin/report_wrapper &> /dev/null
 
 exit 0
 EOF
