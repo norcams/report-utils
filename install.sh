@@ -23,6 +23,7 @@ cat <<-EOF | sudo tee /etc/cron.daily/report
 
 exit 0
 EOF
+  sudo chmod 700 /etc/cron.daily/report
 }
 
 install_systemd() {
