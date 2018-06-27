@@ -29,7 +29,7 @@ fi
 
 major_version=`echo $platform_version | cut -d. -f1`
 
-url="https://report.uh-iaas.no/downloads/${platform}/${major_version}/report"
+url="https://report.uh-iaas.no/downloads/${platform}/${major_version}/v1/report"
 
 install() {
 cat <<-EOF | sudo tee /usr/local/sbin/report_wrapper
