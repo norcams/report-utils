@@ -98,7 +98,7 @@ case $platform in
     esac
     ;;
   "debian")
-    download_cmd='wget -O /usr/local/sbin/report'
+    download_cmd='wget --quiet -O /usr/local/sbin/report'
     install_wrapper
     install_systemd
     ;;
