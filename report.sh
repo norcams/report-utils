@@ -9,6 +9,6 @@ curl -k -X POST --header 'Content-Type: application/json' --header 'Accept: appl
    \"ip\": \"$ip\", \
    \"name\": \"$hostname\", \
    \"uptime\": $uptime  \
- }" 'https://report.uh-iaas.no/api/v1/instance'
+}" 'https://report.uh-iaas.no/api/v1/instance'
 
 exit 0
