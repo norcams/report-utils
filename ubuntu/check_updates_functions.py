@@ -74,9 +74,9 @@ def is_security_upgrade(pkg, depcache):
                             ("gNewSense", "%s-security" % DISTRO),
                             ("Debian", "%s-updates" % DISTRO)]
 
-        for (file, index) in ver.file_list:
+        for (f, index) in ver.file_list:
             for origin, archive in security_pockets:
-                if file.archive == archive and file.origin == origin:
+                if f.archive == archive and f.origin == origin:
                     return True
         return False
     inst_ver = pkg.current_ver
