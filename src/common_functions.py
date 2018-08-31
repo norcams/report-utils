@@ -11,3 +11,9 @@ def get_ipaddress():
     s.close()
     return ip_address
 
+def checksum_file(file_path):
+    with open(file_path, 'rb') as f:
+        data = f.read()
+        checksum = hashlib.md5(data).hexdigest()
+    return checksum
+
