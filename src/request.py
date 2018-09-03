@@ -3,4 +3,4 @@ headers = {'Content-Type': 'application/json',
            'Accept': 'application/json'}
 
 r = requests.post(url, headers=headers, data=json.dumps(payload))
-print(r.text)
+print(r.status_code)
