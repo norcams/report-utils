@@ -51,16 +51,31 @@ function Get-PendingUpdate {
   }
 }
 
+function Get-MD5Sum($path)
+{
+  $fullPath = Resolve-Path $path
+  $checksum = (Get-FileHash $fullPath -Algorithm MD5)
+  $checksum.Hash.ToLower()
+}
+
+Function Get-OwnPath {
+  $MyInvocation.PSCommandPath
+}
+
 $uptime = Get-Uptime
 $ip = Get-IpAddress
 $hostname = Get-HostName
 $updates = Get-PendingUpdate
+$md5sum = Get-MD5Sum(Get-OwnPath)
+$osversion = [System.Environment]::OSVersion.Version.ToString()
 
 $JSON = @{
 "ip" = "$ip"
 "name" = "$hostname"
 "uptime" = $uptime
 "updates" = $updates
+"md5sum" = "$md5sum"
+"kernel" = "$osversion"
 }|ConvertTo-Json
 
 $response = Invoke-WebRequest -Uri "https://report.uh-iaas.no/api/v1/instance" -ContentType "application/json" -Method POST -Body $JSON
