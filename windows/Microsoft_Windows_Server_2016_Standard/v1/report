@@ -23,14 +23,44 @@ function Get-HostName {
    Write-Output $hostname.ToLower()
 }
 
+function Get-PendingUpdate {
+  If (Test-Connection -ComputerName $env:COMPUTERNAME -Count 1 -Quiet) {
+    Try {
+      # Create Session COM object
+      Write-Verbose "Creating COM object for WSUS Session"
+      $updatesession = [activator]::CreateInstance([type]::GetTypeFromProgID("Microsoft.Update.Session",$env:COMPUTERNAME))
+    }
+    Catch {
+      Write-Warning "$($Error[0])"
+      Write-Output -1
+      Break
+    }
+
+    # Configure Session COM Object
+    Write-Verbose "Creating COM object for WSUS update Search"
+    $updatesearcher = $updatesession.CreateUpdateSearcher()
+
+    # Configure Searcher object to look for Updates awaiting installation
+    Write-Verbose "Searching for WSUS updates on client"
+    $searchresult = $updatesearcher.Search("IsInstalled=0")
+
+    $count = $searchresult.Updates.Count
+
+    Write-Output $count
+
+  }
+}
+
 $uptime = Get-Uptime
 $ip = Get-IpAddress
 $hostname = Get-HostName
+$updates = Get-PendingUpdate
 
 $JSON = @{
 "ip" = "$ip"
 "name" = "$hostname"
 "uptime" = $uptime
+"updates" = $updates
 }|ConvertTo-Json
 
 $response = Invoke-WebRequest -Uri "https://report.uh-iaas.no/api/v1/instance" -ContentType "application/json" -Method POST -Body $JSON
