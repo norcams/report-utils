@@ -38,4 +38,4 @@ debian:
 	src/common_functions.py debian/check_updates_functions.py \
 	src/payload.py debian/updates_payload.py src/request.py \
 	> debian/9/v1/report
-    ln -sf ../../10/v1/report debian/9/v1/report
+	ln -sf ../../10/v1/report debian/9/v1/report
