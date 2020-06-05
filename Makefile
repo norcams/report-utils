@@ -9,7 +9,9 @@ centos:
 	    el/check_updates.py src/payload.py el/updates_payload.py \
 	    src/request.py > el/7/v1/report
 	ln -sf ../../7/v1/report el/6/v1/report
-	ln -sf ../../7/v1/report el/8/v1/report
+	# CentOS 8 does not provide a 'python' binary or symlink
+	# This is only a temp. workaround
+	ln -sf ../../../fedora/28/v1/report el/8/v1/report
 
 .PHONY: fedora
 fedora:
