@@ -9,7 +9,9 @@ centos:
 	    el/check_updates.py src/payload.py el/updates_payload.py \
 	    src/request.py > el/7/v1/report
 	ln -sf ../../7/v1/report el/6/v1/report
-	ln -sf ../../7/v1/report el/8/v1/report
+	cat el/shebang_8 src/imports.py el/imports.py src/common_functions.py \
+	    el/check_updates.py src/payload.py el/updates_payload.py \
+	    src/request.py > el/8/v1/report
 
 .PHONY: fedora
 fedora:
