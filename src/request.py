@@ -1,4 +1,4 @@
-url = 'https://report.uh-iaas.no/api/v1/instance'
+url = 'https://report.nrec.no/api/v1/instance'
 headers = {'Content-Type': 'application/json',
            'Accept': 'application/json'}
 

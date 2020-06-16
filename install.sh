@@ -41,7 +41,7 @@ WantedBy=timers.target
 EOF
 cat <<-EOF | sudo tee /lib/systemd/system/report.service
 [Unit]
-Description=Report to UH-IaaS report API
+Description=Report to NREC report API
 
 [Service]
 Type=oneshot
@@ -80,7 +80,7 @@ fi
 
 major_version=`echo $platform_version | cut -d. -f1`
 
-url="https://report.uh-iaas.no/downloads/${platform}/${major_version}/v1/report"
+url="https://report.nrec.no/downloads/${platform}/${major_version}/v1/report"
 
 case $platform in
   "el")

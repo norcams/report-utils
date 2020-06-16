@@ -2,7 +2,7 @@
 ##
 ## Report patching and security
 ##
-## The UH-IaaS Team
+## The NREC Team
 ##
 ##########################################
 
@@ -78,6 +78,6 @@ $JSON = @{
 "kernel" = "$osversion"
 }|ConvertTo-Json
 
-$response = Invoke-WebRequest -Uri "https://report.uh-iaas.no/api/v1/instance" -ContentType "application/json" -Method POST -Body $JSON
+$response = Invoke-WebRequest -Uri "https://report.nrec.no/api/v1/instance" -ContentType "application/json" -Method POST -Body $JSON
 
 #Write-Output $response
