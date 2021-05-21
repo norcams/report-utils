@@ -15,7 +15,7 @@ centos:
 
 .PHONY: fedora
 fedora:
-	mkdir -p fedora/27/v1 fedora/28/v1 fedora/29/v1 fedora/30/v1 fedora/31/v1 fedora/32/v1
+	mkdir -p fedora/27/v1 fedora/28/v1 fedora/29/v1 fedora/30/v1 fedora/31/v1 fedora/32/v1 fedora/34/v1
 	cat fedora/shebang src/imports.py fedora/imports.py \
 	    src/common_functions.py fedora/check_updates.py src/payload.py \
 	    fedora/updates_payload.py src/request.py > fedora/28/v1/report
@@ -24,14 +24,16 @@ fedora:
 	ln -sf ../../28/v1/report fedora/30/v1/report
 	ln -sf ../../28/v1/report fedora/31/v1/report
 	ln -sf ../../28/v1/report fedora/32/v1/report
+	ln -sf ../../28/v1/report fedora/34/v1/report
 
 .PHONY: ubuntu
 ubuntu:
-	mkdir -p ubuntu/16/v1 ubuntu/17/v1 ubuntu/18/v1 ubuntu/19/v1 ubuntu/20/v1
+	mkdir -p ubuntu/16/v1 ubuntu/17/v1 ubuntu/18/v1 ubuntu/19/v1 ubuntu/20/v1 ubuntu/21/v1
 	cat ubuntu/shebang src/imports.py ubuntu/imports.py \
 	src/common_functions.py ubuntu/check_updates_functions.py \
 	src/payload.py ubuntu/updates_payload.py src/request.py \
 	> ubuntu/18/v1/report
+	ln -sf ../../18/v1/report ubuntu/21/v1/report
 	ln -sf ../../18/v1/report ubuntu/20/v1/report
 	ln -sf ../../18/v1/report ubuntu/19/v1/report
 	ln -sf ../../18/v1/report ubuntu/17/v1/report
