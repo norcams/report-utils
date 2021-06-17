@@ -1,6 +1,7 @@
 
 .PHONY: default
-default: centos fedora ubuntu debian
+default:
+	echo "OBSOLETE! Use puppet/hieradata (himlar)"
 
 .PHONY: centos
 centos:
